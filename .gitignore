@@ -1,0 +1,8 @@
+build/*
+ReiNXSettings.*
+*.elf
+*.nro
+*.pfs0
+*.nso
+*.nacp
+*.nsp
