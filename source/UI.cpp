@@ -92,9 +92,9 @@ void UI::optAutoRCM() {
     bool res = MessageBox("Warning!", "THIS WRITES TO NAND.\nDo you want to continue?", TYPE_YES_NO);
     if(res) {
         appletBeginBlockingHomeButton(0);
-        Tools::toggle_rcm();
+        int ret = Tools::toggle_rcm();
         appletEndBlockingHomeButton();
-        MessageBox("AutoRCM", "AutoRCM Toggled!", TYPE_OK);
+        MessageBox("AutoRCM", ret ? "AutoRCM enabled" : "AutoRCM disabled", TYPE_OK);
     }
     
     //Easter egg ;^)
