@@ -20,6 +20,7 @@
 
 int Tools::toggle_rcm() {
 	FsStorage store;
+	int ret = 0;
 	int boot0_partition = 0; //boot0 is represented by 0x0 internally
 	Result rc =  fsOpenBisStorage(&store, boot0_partition);
 	//UI::printmessage("fsOpenBisStorage Result: %d\n", rc);
@@ -38,11 +39,13 @@ int Tools::toggle_rcm() {
 	for(int i=0; i < 4; i++){
 		int off = BCT_KEY_OFF + i*BCT_SZ;
 		buf[off] ^= RCM_XOR;
+		if (buf[off] != 0xF7)
+		    ret = 1; // BOOT0 not valid
 	}
-	
+
 	//write the modified boot0 back to the emmc
 	fsStorageWrite(&store, 0, buf, size);
 	fsStorageClose(&store);
 	free(buf);
-	return 0;
+	return ret;
 }
