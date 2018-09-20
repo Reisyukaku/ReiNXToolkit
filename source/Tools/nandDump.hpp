@@ -35,8 +35,9 @@
 #include "../UI.hpp"
 
 #define MAX_SIZE 0xBA600000
-#define BLOCK_SIZE 0x100000
-
+#define NAND_BLOCK_SIZE 0x470000
+#define CAL0_BLOCK_SIZE 0x3FBC00
+#define BOOT_BLOCK_SIZE 0x400000
 using namespace std;
 
 enum partitions {
@@ -49,7 +50,7 @@ enum partitions {
     BCPKG24,
     BCPKG25,
     BCPKG26,
-    ProdInfo,
+    ProdInfo = 27,
     ProdInfoF,
     SAFE,
     USER,

@@ -24,6 +24,7 @@ extern "C" {
 
 UI *ui;
 ProgBar prog;
+int buffer_size;
 
 const char * directoryname = "Toolkit/dump";
 const char * absdirname = "sdmc:/Toolkit/dump";
@@ -94,17 +95,34 @@ int write_progress(int count){
 
 
 void Tools::calculate_time(u64 begin, u64 end) {
+    char timeBuff[100];
     u64 min, sec;
     u64 total_time = end - begin;  //calculates the total number
     min = total_time/60;
     sec = total_time%60;
-    //UI::printmessage("Total time taken is %ld minutes and %ld seconds.\n", min, sec);
+    sprintf(timeBuff, "Time taken is %ld minutes and %ld seconds.", min, sec);
+    ui->MessageBox("Notice", timeBuff, TYPE_OK);
 }
 
 int Tools::DumpPartition(int part_number, string name) {
-    //timing code
+    switch(part_number){
+        case 0:
+            buffer_size = BOOT_BLOCK_SIZE;
+            break;
+        case 10:
+            buffer_size = BOOT_BLOCK_SIZE;
+            break;
+        case 20:
+            buffer_size = NAND_BLOCK_SIZE;
+            break;
+        case 27:
+            buffer_size = CAL0_BLOCK_SIZE;
+            break;
+    }
+    //makes sure paths exist before attempting to write to them
     mkpath("sdmc:/Toolkit", S_IRWXU);//Both mkpath()s have to be present to make the Toolkit/dump folder to prevent a bug where nandDump does not start properly
     mkpath(absdirname,S_IRWXU);
+    //timing code
     Result rc = timeInitialize();
     u64 start, finish;
     timeGetCurrentTime(TimeType_LocalSystemClock, &start);
@@ -112,11 +130,11 @@ int Tools::DumpPartition(int part_number, string name) {
     //initialization
     ui = UI::getInstance();
     FsStorage store;
-    rc = fsOpenBisStorage(&store, part_number);
+    Result rc2 = fsOpenBisStorage(&store, part_number);
     u64 size = 0;
     fsStorageGetSize(&store, &size);
     //UI::printmessage("BIS size:  %lx\n", size);
-    char *buf = (char *)malloc(BLOCK_SIZE);
+    char *buf = (char *)malloc(buffer_size);
     u64 total_files = size/MAX_SIZE;
     u64 file_max = MAX_SIZE;
     if(total_files == 0) 
@@ -137,7 +155,7 @@ int Tools::DumpPartition(int part_number, string name) {
     do {
         prog.max = file_max;
         prog.curr = 0;
-        prog.step = BLOCK_SIZE;
+        prog.step = buffer_size;
         if(part_number==partitions::rawnand)
             ui->CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files) + "...");
         else  ui->CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files+1) + "...");
@@ -145,7 +163,7 @@ int Tools::DumpPartition(int part_number, string name) {
         
         if(total_files<1) //Checks to see what type of dump is initated to determin how it should name the file
             snprintf(file_name, 256, "%s/%s", absdirname, name.c_str());
-        else snprintf(file_name, 256, "%s/%s.bin.%02ld", absdirname, name.c_str(), file_num);
+        else snprintf(file_name, 256, "%s/%s.%02ld", absdirname, name.c_str(), file_num);
 
         //UI::printmessage("string: %s\n", file_name);
         FILE * fp = fopen(file_name, "wb");
@@ -160,18 +178,22 @@ int Tools::DumpPartition(int part_number, string name) {
             fseek(fp, 0, SEEK_SET);
         }
         u64 cur_file_blocks=0;
-        while(cur_file_blocks*BLOCK_SIZE < file_max) {
-            Result rc3 = fsStorageRead(&store, file_max*file_num + cur_file_blocks*BLOCK_SIZE, buf, BLOCK_SIZE);
-            fwrite(buf, BLOCK_SIZE, 1, fp);
+        while(cur_file_blocks*buffer_size < file_max) {
+            Result rc3 = fsStorageRead(&store, file_max*file_num + cur_file_blocks*buffer_size, buf, buffer_size);
+            fwrite(buf, buffer_size, 1, fp);
             cur_file_blocks++;
-            dump_percent = ((float)cur_file_blocks*BLOCK_SIZE)/file_max;
+            dump_percent = ((float)cur_file_blocks*buffer_size)/file_max;
             ui->IncrementProgressBar(&prog);
         }
         fclose(fp);
         file_num++;
         if(part_number==partitions::rawnand)
             write_progress(file_num);
-        if(CheckFreeSpace() < MAX_SIZE){
+        if((CheckFreeSpace() < MAX_SIZE) && (file_num<10)){
+            fsStorageClose(&store); 
+            timeGetCurrentTime(TimeType_LocalSystemClock, &finish);
+            calculate_time(start, finish);
+            timeExit();
             ui->MessageBox("Warning!", "Out of free space. Copy the dumped files to a safe spot, then rerun to finish dumping. Press A to reboot.", TYPE_YES_NO);
             fsdevUnmountAll();
             Power::Reboot();
