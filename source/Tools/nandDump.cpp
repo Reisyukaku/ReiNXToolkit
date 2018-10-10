@@ -194,9 +194,9 @@ int Tools::DumpPartition(int part_number, string name) {
             timeGetCurrentTime(TimeType_LocalSystemClock, &finish);
             calculate_time(start, finish);
             timeExit();
-            ui->MessageBox("Warning!", "Out of free space. Copy the dumped files to a safe spot, then rerun to finish dumping. Press A to reboot.", TYPE_YES_NO);
+            ui->MessageBox("Warning!", "Out of free space. Copy the dumped files\n to a safe spot, then rerun to finish dumping.", TYPE_OK);
             fsdevUnmountAll();
-            Power::Reboot();
+            Power::Shutdown();
             return 1;
         }
 

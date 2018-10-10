@@ -64,9 +64,11 @@ class UI
         void optDumpNand();
         void optToggleKip(string path);
         void drawKipman();
+        void drawCfwman();
         
         //SubMenus
         void optImage(u32 ind);
+        void optCfwCfg(string file);
         void optShutdown();
         void optReboot();
         void optAbout();

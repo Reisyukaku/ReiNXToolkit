@@ -186,8 +186,6 @@ all	: $(OUTPUT).nsp $(OUTPUT).nro
 
 ifeq ($(strip $(APP_JSON)),)
 $(OUTPUT).nsp	:	$(OUTPUT).nso
-else
-$(OUTPUT).nsp	:	$(OUTPUT).nso $(OUTPUT).npdm
 endif
 
 $(OUTPUT).nso	:	$(OUTPUT).elf

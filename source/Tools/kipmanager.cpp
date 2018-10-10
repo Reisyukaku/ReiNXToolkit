@@ -22,34 +22,12 @@ std::string smdDir ("/ReiNX/sysmodules");
 std::string disDir (smdDir + ".dis");
 
 int enabledStatus(std::string path) {
-    if (path == "nogc") {
-        FILE *f;
-        if (f = fopen("/ReiNX/nogc", "rb")) {
-            fclose(f);
-            return 1;
-        }
-        return 0;
-    }
     if (path.compare(0, disDir.length(), disDir) == 0) {
         return 0;
     } else if (path.compare(0, smdDir.length(), smdDir) == 0) {
         return 1;
     }
     return -1; // this should never happen
-}
-
-int toggleNogc() {
-    int status = enabledStatus("nogc");
-
-    if (status == 0) {
-        FILE *f = fopen("/ReiNX/nogc", "wb");
-        if (f != NULL) {
-            fclose(f);
-            return 0;
-        }
-        return -1;
-    }
-    return remove("/ReiNX/nogc");
 }
 
 std::string getName(std::string path) {
@@ -79,8 +57,6 @@ void kip::LoadKips(std::vector<std::string> *kips){
         (*kips).push_back(disDir + "/" + dis_name[i]);
     }
 
-    (*kips).push_back("nogc"); // add nogc toggle
-
     std::sort((*kips).rbegin(), (*kips).rend(), compKip);
 }
 
@@ -104,9 +80,6 @@ std::string kip::Name(std::string path) {
 }
 
 int kip::Toggle(std::string path) {
-    if (path == "nogc")
-        return toggleNogc();
-
     int status = enabledStatus(path);
     std::string name = getName(path);
 

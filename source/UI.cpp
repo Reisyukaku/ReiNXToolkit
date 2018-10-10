@@ -20,6 +20,7 @@
 #include "Net/Request.hpp"
 #include "Tools/autorcm.hpp"
 #include "Tools/kipmanager.hpp"
+#include "Tools/reinxconfig.hpp"
 #include "Tools/nandDump.hpp"
 #include "Utils/unzip_utils.hpp"
 #include "FS.hpp"
@@ -142,24 +143,6 @@ void UI::optDumpNand() {
     }
 }
 
-void UI::optToggleKip(string path) {
-    int ret = kip::Toggle(path);
-    if (ret != 0)
-        MessageBox("Failed to toggle KIP", "Error code " + to_string(ret), TYPE_OK);
-    UI::drawKipman();
-}
-
-void UI::drawKipman() {
-    mainMenu[2].subMenu.clear();
-    vector<string> kips;
-    kip::LoadKips(&kips);
-
-    for(unsigned int i=0;i<kips.size();i++) {
-        mainMenu[2].subMenu.push_back(MenuOption(kip::Name(kips[i]), "", 
-          bind(&UI::optToggleKip, this, kips[i])));
-    }
-}
-
 /*
 * SubMenus
 */
@@ -186,6 +169,42 @@ void UI::optImage(u32 ind) {
     
     SDL_FreeSurface(converted_surface);
     MessageBox("Conversion", "Image successfully converted!", TYPE_OK);
+}
+
+void UI::optToggleKip(string path) {
+    int ret = kip::Toggle(path);
+    if (ret != 0)
+        MessageBox("Failed to toggle KIP", "Error code " + to_string(ret), TYPE_OK);
+    UI::drawKipman();
+}
+
+void UI::drawKipman() {
+    mainMenu[2].subMenu.clear();
+    vector<string> kips;
+    kip::LoadKips(&kips);
+
+    for(unsigned int i=0;i<kips.size();i++) {
+        mainMenu[2].subMenu.push_back(MenuOption(kip::Name(kips[i]), "", bind(&UI::optToggleKip, this, kips[i])));
+    }
+}
+
+void UI::optCfwCfg(string file) {
+    int ret = cfg::Toggle(file);
+    if (ret != 0)
+        MessageBox("Failed to toggle config file", "Error code " + to_string(ret), TYPE_OK);
+    UI::drawCfwman();
+}
+
+void UI::drawCfwman() {
+    mainMenu[3].subMenu.clear();
+    vector<string> flags;
+    
+    flags.push_back("nogc");
+    flags.push_back("debug");
+
+    for(unsigned int i=0;i<flags.size();i++) {
+        mainMenu[3].subMenu.push_back(MenuOption(cfg::Name(flags[i]), "", bind(&UI::optCfwCfg, this, flags[i])));
+    }
 }
 
 //Power
@@ -281,6 +300,7 @@ UI::UI(string Title, string Version) {
     mainMenu.push_back(MenuOption("ReiNX Updates", "Update ReiNX CFW.", nullptr));
     mainMenu.push_back(MenuOption("Change splash", "Change ReiNX splash.bin image.", nullptr));
     mainMenu.push_back(MenuOption("KIP Manager", "Enable or disable KIPs. Requires a reboot to take effect.", nullptr));
+    mainMenu.push_back(MenuOption("CFW Manager", "Enable or disable cfw options. Requires a reboot to take effect.", nullptr));
     mainMenu.push_back(MenuOption("Toggle AutoRCM", "Toggles AutoRCM by writing to NAND.",  bind(&UI::optAutoRCM, this)));
     mainMenu.push_back(MenuOption("Backup tool", "Backup various partitions from NAND.", nullptr));
     mainMenu.push_back(MenuOption("Power", "Power options.", nullptr));
@@ -297,15 +317,16 @@ UI::UI(string Title, string Version) {
     }
 
     UI::drawKipman();
+    UI::drawCfwman();
 
-    mainMenu[4].subMenu.push_back(MenuOption("Backup Cal0", "", bind(&UI::optDumpCal0, this)));
-    mainMenu[4].subMenu.push_back(MenuOption("Backup Boot0/1", "", bind(&UI::optDumpBoots, this)));
-    mainMenu[4].subMenu.push_back(MenuOption("Backup NAND", "", bind(&UI::optDumpNand, this)));
+    mainMenu[5].subMenu.push_back(MenuOption("Backup Cal0", "", bind(&UI::optDumpCal0, this)));
+    mainMenu[5].subMenu.push_back(MenuOption("Backup Boot0/1", "", bind(&UI::optDumpBoots, this)));
+    mainMenu[5].subMenu.push_back(MenuOption("Backup NAND", "", bind(&UI::optDumpNand, this)));
     
-    mainMenu[5].subMenu.push_back(MenuOption("Reboot", "", bind(&UI::optReboot, this)));
-    mainMenu[5].subMenu.push_back(MenuOption("Shutdown", "", bind(&UI::optShutdown, this)));
+    mainMenu[6].subMenu.push_back(MenuOption("Reboot", "", bind(&UI::optReboot, this)));
+    mainMenu[6].subMenu.push_back(MenuOption("Shutdown", "", bind(&UI::optShutdown, this)));
     
-    mainMenu[6].subMenu.push_back(MenuOption("About", "", bind(&UI::optAbout, this)));
+    mainMenu[7].subMenu.push_back(MenuOption("About", "", bind(&UI::optAbout, this)));
     
     //Make dirs
     if(!FS::DirExists("/Toolkit"))  FS::MakeDir("/Toolkit", 0777);
