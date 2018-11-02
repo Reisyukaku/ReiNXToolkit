@@ -70,5 +70,7 @@ bool Net::Download(string url, string filepath) {
     } else {
         res = CURLE_HTTP_RETURNED_ERROR;
     }
+    if (res != CURLE_OK)
+        remove(filepath.c_str());
     return res == CURLE_OK ? false : true;
 }

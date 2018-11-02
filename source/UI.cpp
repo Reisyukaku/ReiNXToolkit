@@ -237,7 +237,7 @@ void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    string url = "http://builds.reinx.guide/toolkit/ReiNX_Toolkit-latest.nro";
+    string url = "http://builds.reinx.guide/toolkit/ReiNXToolkit-latest.nro";
 
     if (!MessageBox("Update", 
       "This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?", 
