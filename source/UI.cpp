@@ -367,12 +367,28 @@ void UI::exitApp() {
 * UI draw functions
 */
 void UI::drawText(int x, int y, SDL_Color scolor, string text, TTF_Font *font) {
-    SDL_Surface *surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), scolor, 1280);
-    SDL_SetSurfaceAlphaMod(surface, 255);
-    SDL_Rect position = { x, y, surface->w, surface->h };
-    SDL_BlitSurface(surface, NULL, mRender._surface, &position);
-    SDL_FreeSurface(surface);
+	SDL_Surface *surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), scolor, 1280);
+
+	if (!surface) {
+		return;
+	}
+
+	SDL_SetSurfaceAlphaMod(surface, 255);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(mRender._renderer, surface);
+
+	if (texture) {
+		SDL_Rect position;
+		position.x = x;
+		position.y = y;
+		position.w = surface->w;
+		position.h = surface->h;
+
+		SDL_RenderCopy(mRender._renderer, texture, NULL, &position);
+		SDL_DestroyTexture(texture);
+	}
+	SDL_FreeSurface(surface);
 }
+
 
 void UI::drawRect(int x, int y, int w, int h, SDL_Color scolor, unsigned border, SDL_Color bcolor) {
     drawRect(x-border, y-border, w+(2*border), h+(2*border), bcolor);
