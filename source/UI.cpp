@@ -64,12 +64,10 @@ void UI::optReiUpdate() {
     ProgBar prog;
     prog.max = 4;
     prog.step = 1;
-    string url = "http://s000.tinyupload.com/download.php?file_id=00976871212306147131&t=0097687121230614713190503";
+    string url = "http://45.248.48.62/ReiNX_2.0.zip";
     CreateProgressBar(&prog, "Updating ReiNX...");
   /*
-reinx 2.0 downloaded from guide and re-uploaded to tinyupload by adran. 
-
-Original URL: http://s000.tinyupload.com/index.php?file_id=00976871212306147131
+reinx 2.0 downloaded from guide and re-uploaded by adran. 
 */  
     Net net = Net();
     hidScanInput();
@@ -241,7 +239,7 @@ void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    string url = "http://reinx.guide/downloads/ReiNXToolkit.nro";
+    string url = "http://45.248.48.62/ReiNXToolkit.nro";
 
     if (!MessageBox("Update", 
       "This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?", 
