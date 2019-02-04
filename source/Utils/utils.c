@@ -11,9 +11,6 @@
 #include "sha256.h"
 
 void gfx_update(void) {
-  gfxFlushBuffers();
-  gfxSwapBuffers();
-  gfxWaitForVsync();
 }
 
 void wait_for_button(u64 b) {
