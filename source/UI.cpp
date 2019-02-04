@@ -64,9 +64,13 @@ void UI::optReiUpdate() {
     ProgBar prog;
     prog.max = 4;
     prog.step = 1;
-    string url = "http://builds.reinx.guide/nightly/ReiNX-latest.zip";
+    string url = "http://s000.tinyupload.com/download.php?file_id=00976871212306147131&t=0097687121230614713190503";
     CreateProgressBar(&prog, "Updating ReiNX...");
-    
+  /*
+reinx 2.0 downloaded from guide and re-uploaded to tinyupload by adran. 
+
+Original URL: http://s000.tinyupload.com/index.php?file_id=00976871212306147131
+*/  
     Net net = Net();
     hidScanInput();
     if(hidKeysDown(CONTROLLER_P1_AUTO) & KEY_L) {
@@ -74,14 +78,14 @@ void UI::optReiUpdate() {
             FS::DeleteDirRecursive("./ReiNX");
         }
     }
-    bool res = net.Download(url, "/ReiNX.zip");
+    bool res = net.Download(url, "/ReiNX_2.0.zip");
     IncrementProgressBar(&prog);
     if(!res){
         appletBeginBlockingHomeButton(0);
-        unzFile zip = Utils::zip_open("/ReiNX.zip"); IncrementProgressBar(&prog);
+        unzFile zip = Utils::zip_open("/ReiNX_2.0.zip"); IncrementProgressBar(&prog);
         Utils::zip_extract_all(zip, "/"); IncrementProgressBar(&prog);
         Utils::zip_close(zip); IncrementProgressBar(&prog);
-        remove("/ReiNX.zip");
+        remove("/ReiNX_2.0.zip");
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update has downloaded successfully!", TYPE_OK);
     }else{
@@ -237,7 +241,7 @@ void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    string url = "http://builds.reinx.guide/toolkit/ReiNXToolkit-latest.nro";
+    string url = "http://reinx.guide/downloads/ReiNXToolkit.nro";
 
     if (!MessageBox("Update", 
       "This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?", 
