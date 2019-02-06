@@ -64,7 +64,7 @@ void UI::optReiUpdate() {
     ProgBar prog;
     prog.max = 4;
     prog.step = 1;
-    string url = "http://45.248.48.62/ReiNX_2.0.zip";
+    string url = "http://45.248.48.62/ReiNX.zip";
     CreateProgressBar(&prog, "Updating ReiNX...");
   /*
 reinx 2.0 downloaded from guide and re-uploaded by adran. 
@@ -76,14 +76,14 @@ reinx 2.0 downloaded from guide and re-uploaded by adran.
             FS::DeleteDirRecursive("./ReiNX");
         }
     }
-    bool res = net.Download(url, "/ReiNX_2.0.zip");
+    bool res = net.Download(url, "/ReiNX.zip");
     IncrementProgressBar(&prog);
     if(!res){
         appletBeginBlockingHomeButton(0);
-        unzFile zip = Utils::zip_open("/ReiNX_2.0.zip"); IncrementProgressBar(&prog);
+        unzFile zip = Utils::zip_open("/ReiNX.zip"); IncrementProgressBar(&prog);
         Utils::zip_extract_all(zip, "/"); IncrementProgressBar(&prog);
         Utils::zip_close(zip); IncrementProgressBar(&prog);
-        remove("/ReiNX_2.0.zip");
+        remove("/ReiNX.zip");
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update has downloaded successfully!", TYPE_OK);
     }else{
