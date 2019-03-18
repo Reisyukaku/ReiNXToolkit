@@ -35,6 +35,7 @@ APP_TITLE := ReiNX Toolkit
 APP_AUTHOR := Rei
 APP_VERSION := 1.3.1
 
+
 ICON := Icon.jpg
 TARGET		:=	ReiNXToolkit
 BUILD		:=	build
