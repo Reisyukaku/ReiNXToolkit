@@ -67,7 +67,7 @@ void UI::optReiUpdate() {
     string url = "http://45.248.48.62/ReiNX.zip";
     CreateProgressBar(&prog, "Updating ReiNX...");
   /*
-reinx 2.0 downloaded from guide and re-uploaded by adran. 
+reinx 2.1 download. Toolkit update by Adran 
 */  
     Net net = Net();
     hidScanInput();
@@ -84,6 +84,7 @@ reinx 2.0 downloaded from guide and re-uploaded by adran.
         Utils::zip_extract_all(zip, "/"); IncrementProgressBar(&prog);
         Utils::zip_close(zip); IncrementProgressBar(&prog);
         remove("/ReiNX.zip");
+        remove("/ReiNX.bin");
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update has downloaded successfully!", TYPE_OK);
     }else{
@@ -91,7 +92,6 @@ reinx 2.0 downloaded from guide and re-uploaded by adran.
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
     }
 }
-
 void UI::optAutoRCM() {
     bool res = MessageBox("Warning!", "THIS WRITES TO NAND.\nDo you want to continue?", TYPE_YES_NO);
     if(res) {

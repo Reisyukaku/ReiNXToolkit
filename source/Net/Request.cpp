@@ -23,7 +23,7 @@ static struct curl_slist *hosts = NULL;
 
 Net::Net() {
     curl_global_init(CURL_GLOBAL_DEFAULT);
-    hosts = curl_slist_append(NULL, "dootnode.org:80:91.121.75.178");
+    hosts = curl_slist_append(NULL, "reinx.guide:167.99.228.103");
 }
 
 size_t writeFunction(void *ptr, size_t size, size_t nmemb, std::string* data) {
