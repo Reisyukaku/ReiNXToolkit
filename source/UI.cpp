@@ -60,15 +60,18 @@ UI * UI::mInstance = 0;
 /* ---------------------------------------------------------------------------------------
 * Menu functions
 */
+
+/*
+Updated with latest libnx to get reinx from guide via https
+*/
+
 void UI::optReiUpdate() {
     ProgBar prog;
     prog.max = 4;
     prog.step = 1;
-    string url = "http://45.248.48.62/ReiNX.zip";
+    string url = "https://reinx.guide/downloads/ReiNX_Latest.zip";
     CreateProgressBar(&prog, "Updating ReiNX...");
-  /*
-reinx 2.1 download. Toolkit update by Adran 
-*/  
+ 
     Net net = Net();
     hidScanInput();
     if(hidKeysDown(CONTROLLER_P1_AUTO) & KEY_L) {
@@ -76,15 +79,14 @@ reinx 2.1 download. Toolkit update by Adran
             FS::DeleteDirRecursive("./ReiNX");
         }
     }
-    bool res = net.Download(url, "/ReiNX.zip");
+    bool res = net.Download(url, "/ReiNX_Latest.zip");
     IncrementProgressBar(&prog);
     if(!res){
         appletBeginBlockingHomeButton(0);
-        unzFile zip = Utils::zip_open("/ReiNX.zip"); IncrementProgressBar(&prog);
+        unzFile zip = Utils::zip_open("/ReiNX_Latest.zip"); IncrementProgressBar(&prog);
         Utils::zip_extract_all(zip, "/"); IncrementProgressBar(&prog);
         Utils::zip_close(zip); IncrementProgressBar(&prog);
-        remove("/ReiNX.zip");
-        remove("/ReiNX.bin");
+        remove("/ReiNX_Latest.zip");
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update has downloaded successfully!", TYPE_OK);
     }else{
@@ -235,11 +237,15 @@ void UI::optAbout() {
     TYPE_OK);
 }
 
+/*
+Updated to get toolkit from the guide
+*/
+
 void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    string url = "http://45.248.48.62/ReiNXToolkit.nro";
+    string url = "https://reinx.guide/downloads/ReiNXToolkit.nro";
 
     if (!MessageBox("Update", 
       "This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?", 
