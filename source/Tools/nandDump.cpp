@@ -22,7 +22,6 @@ extern "C" {
 #include "../Utils/utils.h"
 }
 
-UI *ui;
 ProgBar prog;
 int buffer_size;
 
@@ -74,16 +73,16 @@ int check_progress() {
 void delete_progress(){
     if(!check_progress()) return;
     if (remove(progfile) == 0)
-        ui->MessageBox("Notice","Progress file deleted.\n", TYPE_OK);
+        UI::MessageBox("Notice","Progress file deleted.\n", TYPE_OK);
     else
-        ui->MessageBox("Error!","Unable to delete progress file\n", TYPE_OK);
+        UI::MessageBox("Error!","Unable to delete progress file\n", TYPE_OK);
 }
 
 int write_progress(int count){
    FILE * fp;
    fp = fopen (progfile,"w");
    if(fp==NULL) {
-       ui->MessageBox("Error!","Unable to save progress, sorry!\n", TYPE_OK);
+       UI::MessageBox("Error!","Unable to save progress, sorry!\n", TYPE_OK);
        return -1;
    }
    fprintf (fp, "%d",count); 
@@ -101,7 +100,7 @@ void Tools::calculate_time(u64 begin, u64 end) {
     min = total_time/60;
     sec = total_time%60;
     sprintf(timeBuff, "Time taken is %ld minutes and %ld seconds.", min, sec);
-    ui->MessageBox("Notice", timeBuff, TYPE_OK);
+    UI::MessageBox("Notice", timeBuff, TYPE_OK);
 }
 
 int Tools::DumpPartition(int part_number, string name) {
@@ -128,19 +127,17 @@ int Tools::DumpPartition(int part_number, string name) {
     timeGetCurrentTime(TimeType_LocalSystemClock, &start);
     
     //initialization
-    ui = UI::getInstance();
     FsStorage store;
     Result rc2 = fsOpenBisStorage(&store, part_number);
     u64 size = 0;
     fsStorageGetSize(&store, &size);
-    //UI::printmessage("BIS size:  %lx\n", size);
     char *buf = (char *)malloc(buffer_size);
     u64 total_files = size/MAX_SIZE;
     u64 file_max = MAX_SIZE;
     if(total_files == 0) 
         file_max = fmin(file_max, size);
     if(CheckFreeSpace() < MAX_SIZE) {
-        ui->MessageBox("Warning!", "Out of free space. Try again when there is free space.", TYPE_OK);
+        UI::MessageBox("Warning!", "Out of free space. Try again when there is free space.", TYPE_OK);
         fsStorageClose(&store);
         return 0;
     }
@@ -157,8 +154,8 @@ int Tools::DumpPartition(int part_number, string name) {
         prog.curr = 0;
         prog.step = buffer_size;
         if(part_number==partitions::rawnand)
-            ui->CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files) + "...");
-        else  ui->CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files+1) + "...");
+            UI::CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files) + "...");
+        else  UI::CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files+1) + "...");
         
         
         if(total_files<1) //Checks to see what type of dump is initated to determin how it should name the file
@@ -183,7 +180,7 @@ int Tools::DumpPartition(int part_number, string name) {
             fwrite(buf, buffer_size, 1, fp);
             cur_file_blocks++;
             dump_percent = ((float)cur_file_blocks*buffer_size)/file_max;
-            ui->IncrementProgressBar(&prog);
+            UI::IncrementProgressBar(&prog);
         }
         fclose(fp);
         file_num++;
@@ -194,7 +191,7 @@ int Tools::DumpPartition(int part_number, string name) {
             timeGetCurrentTime(TimeType_LocalSystemClock, &finish);
             calculate_time(start, finish);
             timeExit();
-            ui->MessageBox("Warning!", "Out of free space. Copy the dumped files\n to a safe spot, then rerun to finish dumping.", TYPE_OK);
+            UI::MessageBox("Warning!", "Out of free space. Copy the dumped files\n to a safe spot, then rerun to finish dumping.", TYPE_OK);
             fsdevUnmountAll();
             Power::Shutdown();
             return 1;

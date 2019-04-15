@@ -20,13 +20,9 @@
 #include "Power.hpp"
 
 void Power::Reboot() {
-    bpcInitialize();
-    bpcRebootSystem();
-    bpcExit();
+    libappletRequestRestart();
 }
 
 void Power::Shutdown() {
-	bpcInitialize();
-    bpcShutdownSystem();
-    bpcExit();
+	libappletRequestShutdown();
 }

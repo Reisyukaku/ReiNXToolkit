@@ -26,21 +26,19 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "MenuObj.hpp"
-#include "Render.hpp"
 #include "Themes.hpp"
 
-using namespace std;
-
-class MenuOption : public MenuObj
+class MenuOption
 {
     public:
-        MenuOption(string Name, string Desc, function<void()> Call);
-        string getDesc();
+        MenuOption(std::string Name, std::string Desc, std::function<void()> Call);
+        std::string getDesc() { return desc; }
+        std::string getName() { return name; }
         void callFunc();
-        vector<MenuOption> subMenu;
+        vector<MenuOption*> subMenu;
 
-    protected:
-        string desc;
-        function<void()> callback;
+    private:
+        std::string desc;
+        std::string name;
+        std::function<void()> callback;
 };

@@ -17,32 +17,31 @@
 */
 
 #include <switch.h>
-#include "UI.hpp"
-
+#include "Form.hpp"
 
 int main() {    
-	UI ui(TITLE, VERSION);
-	UI::setInstance(ui);
-    ui.renderMenu();
+	Form frm(TITLE, VERSION);
+    frm.Init();
+    frm.Update();
     
     while(appletMainLoop()) {        
         hidScanInput();
         u64 PressedInput = hidKeysDown(CONTROLLER_P1_AUTO);
         if((PressedInput & KEY_LSTICK_UP)||(PressedInput & KEY_DUP)) {
-            ui.inSubMenu ? ui.SubMenuUp() : ui.MenuUp();
-            ui.renderMenu();
+            frm.inSubMenu ? frm.SubMenuUp() : frm.MenuUp();
+            frm.Update();
         }
         else if((PressedInput & KEY_LSTICK_DOWN)||(PressedInput & KEY_DDOWN)) {
-            ui.inSubMenu ? ui.SubMenuDown() : ui.MenuDown();
-            ui.renderMenu();
+            frm.inSubMenu ? frm.SubMenuDown() : frm.MenuDown();
+            frm.Update();
         }
         if(PressedInput & KEY_A) {
-            ui.MenuSel();
-            ui.renderMenu();
+            frm.MenuSel();
+            frm.Update();
         }
         if(PressedInput & KEY_B) {
-            ui.MenuBack();
-            ui.renderMenu();
+            frm.MenuBack();
+            frm.Update();
         }
     }
 }

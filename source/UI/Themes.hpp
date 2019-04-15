@@ -21,28 +21,27 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "types.hpp"
-#include "Render.hpp"
+#include "Graphics.hpp"
 
 class Themes
 {    
 	public:
-		static Themes * mInstance;
+        Themes();
+        ~Themes();
         string ttf;
         TTF_Font *fntMedium;
         TTF_Font *fntLarge;
         TTF_Font *fntSmall;
-        SDL_Color txtcolor;
-        SDL_Color selcolor;
-        SDL_Color butCol;
-        SDL_Color butBorderCol;
-        SDL_Color bgCol;
-        SDL_Color popCol1;
-        SDL_Color popCol2;
+        u32 txtcolor;
+        u32 selcolor;
+        u32 butCol;
+        u32 butBorderCol;
+        u32 bgCol;
+        u32 popCol1;
+        u32 popCol2;
         SDL_Surface *bgs;
         SDL_Texture *bgt;
-		
-		static Themes *instance();
-        void Init(Render rend);
+        
         Theme HorizonLight();
         Theme HorizonDark();
 };

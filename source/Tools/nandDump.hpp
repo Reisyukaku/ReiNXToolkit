@@ -32,7 +32,7 @@
 #include <assert.h>
 
 #include <switch.h>
-#include "../UI.hpp"
+#include "../UI/UI.hpp"
 
 #define MAX_SIZE 0xBA600000
 #define NAND_BLOCK_SIZE 0x470000

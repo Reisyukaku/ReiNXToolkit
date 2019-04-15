@@ -18,9 +18,41 @@
 
 #include <switch.h>
 #include "Themes.hpp"
-#include "Render.hpp"
 
-Themes * Themes::mInstance = 0;
+Themes::Themes() {
+    //Get current theme set
+    ColorSetId id;
+    setsysInitialize();
+    setsysGetColorSetId(&id);
+    setsysExit();
+    
+    Theme theme = id ? HorizonDark() : HorizonLight();
+    ttf = theme.FontPath;
+    fntLarge = TTF_OpenFont(theme.FontPath.c_str(), 25);
+    fntMedium = TTF_OpenFont(theme.FontPath.c_str(), 20);
+    fntSmall = TTF_OpenFont(theme.FontPath.c_str(), 14);
+    bgs = IMG_Load(theme.BackgroundPath.c_str());
+    if (bgs){
+        Uint32 colorkey = SDL_MapRGB(bgs->format, 0, 0, 0);
+        SDL_SetColorKey(bgs, SDL_TRUE, colorkey);
+    }
+    bgt = Graphics::CreateTexFromSurf(bgs);
+    txtcolor = theme.TextColor;
+    selcolor = theme.SelectedTextColor;
+    butCol = theme.ButtonColor;
+    butBorderCol = theme.ButtonBorderColor;
+    bgCol = theme.BGColor;
+    popCol1 = theme.PopCol1;
+    popCol2 = theme.PopCol2;
+}
+
+Themes::~Themes() {
+    TTF_CloseFont(fntLarge);
+    TTF_CloseFont(fntMedium);
+    TTF_CloseFont(fntSmall);
+    SDL_FreeSurface(bgs);
+    SDL_DestroyTexture(bgt);
+}
 
 Theme Themes::HorizonLight() {
 	Theme th;
@@ -48,46 +80,4 @@ Theme Themes::HorizonDark() {
     th.PopCol1 = 0x202020FF;
     th.PopCol2 = 0x303030FF;
     return th;
-}
-
-SDL_Color convertColor(unsigned col) {
-	SDL_Color c;
-	c.r = ((col >> 24) & 0xFF);
-	c.g = ((col >> 16) & 0xFF);
-	c.b = ((col >> 8) & 0xFF);
-	c.a = (col & 0xFF);
-	return c;
-}
-
-void Themes::Init(Render rend) {
-    //Get current theme set
-    ColorSetId id;
-    setsysInitialize();
-    setsysGetColorSetId(&id);
-    setsysExit();
-    
-    Theme theme = id ? HorizonDark() : HorizonLight();
-    ttf = theme.FontPath;
-    fntLarge = TTF_OpenFont(theme.FontPath.c_str(), 25);
-    fntMedium = TTF_OpenFont(theme.FontPath.c_str(), 20);
-    fntSmall = TTF_OpenFont(theme.FontPath.c_str(), 14);
-    bgs = IMG_Load(theme.BackgroundPath.c_str());
-    if (bgs){
-        Uint32 colorkey = SDL_MapRGB(bgs->format, 0, 0, 0);
-        SDL_SetColorKey(bgs, SDL_TRUE, colorkey);
-    }
-    bgt = SDL_CreateTextureFromSurface(rend._renderer, bgs);
-    txtcolor = convertColor(theme.TextColor);
-    selcolor = convertColor(theme.SelectedTextColor);
-    butCol = convertColor(theme.ButtonColor);
-    butBorderCol = convertColor(theme.ButtonBorderColor);
-    bgCol = convertColor(theme.BGColor);
-    popCol1 = convertColor(theme.PopCol1);
-    popCol2 = convertColor(theme.PopCol2);
-}
-
-Themes * Themes::instance() {
-	if(!mInstance)
-		mInstance = new Themes;
-	return mInstance;
 }
