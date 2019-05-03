@@ -25,8 +25,8 @@ You'll need latest devkitpro and switch-sdl. You can install dependencies by run
  
  * Reboot / shutdown 
  
-![Screenshot1](screenshots/screenshots1.jpg)
-![Screenshot2](screenshots/screenshots2.jpg)
+![Screenshot1](https://github.com/lookye/ReiNXToolkit/blob/master/screenshots/screenshot1.jpg?raw=true)
+![Screenshot2](https://github.com/lookye/ReiNXToolkit/blob/master/screenshots/screenshot2.jpg?raw=true)
 
 **How to use:**
 
