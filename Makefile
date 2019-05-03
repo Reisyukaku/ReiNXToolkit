@@ -33,7 +33,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 
 APP_TITLE := ReiNX Toolkit
 APP_AUTHOR := Rei
-APP_VERSION := 1.4
+APP_VERSION := 1.5
 
 ICON := Icon.jpg
 TARGET		:=	ReiNXToolkit
