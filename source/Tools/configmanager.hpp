@@ -49,6 +49,7 @@ class ConfigManager {
 		int rawProgress = 0;
 		int bootProgress = 0;
 		bool nogc;
+		bool saveredirection;
 		string splashName;
 	private:
 		ConfigManager();
