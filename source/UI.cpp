@@ -205,6 +205,7 @@ void UI::drawCfwman() {
     
     flags.push_back("nogc");
     flags.push_back("debug");
+    flags.push_back("saveredirection");
 
     for(unsigned int i=0;i<flags.size();i++) {
         mainMenu[3].subMenu.push_back(MenuOption(cfg::Name(flags[i]), "", bind(&UI::optCfwCfg, this, flags[i])));
