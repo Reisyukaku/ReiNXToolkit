@@ -16,8 +16,9 @@ extern "C" {
 #include <stddef.h>
 
 /****************************** MACROS ******************************/
-#define SHA256_BLOCK_SIZE 32            // SHA256 outputs a 32 byte digest
-
+#ifndef SHA256_BLOCK_SIZE
+#define SHA256_BLOCK_SIZE 0x20          // SHA256 outputs a 32 byte digest
+#endif
 /**************************** DATA TYPES ****************************/
 typedef unsigned char BYTE;             // 8-bit byte
 typedef unsigned int  WORD;             // 32-bit word, change to "long" for 16-bit machines
