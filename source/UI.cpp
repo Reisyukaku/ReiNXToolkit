@@ -119,7 +119,7 @@ void UI::optAutoRCM() {
 void UI::optDumpCal0() {
     if(Tools::CheckFreeSpace() >= CAL0_BLOCK_SIZE) {
         appletBeginBlockingHomeButton(0);
-        Tools::DumpPartition(ProdInfo, "cal0.bin");
+        Tools::DumpPartition(FsBisStorageId_CalibrationBinary, "cal0.bin");
         appletEndBlockingHomeButton();
     } else {
         MessageBox("Warning!", "Not enough space on the SD card to write to!", TYPE_OK);
@@ -129,8 +129,8 @@ void UI::optDumpCal0() {
 void UI::optDumpBoots() {
     if(Tools::CheckFreeSpace() >= BOOT_BLOCK_SIZE*2) {
         appletBeginBlockingHomeButton(0);
-        Tools::DumpPartition(boot0, "boot0.bin");
-        Tools::DumpPartition(boot1, "boot1.bin");
+        Tools::DumpPartition(FsBisStorageId_Boot0, "boot0.bin");
+        Tools::DumpPartition(FsBisStorageId_Boot1, "boot1.bin");
         appletEndBlockingHomeButton();
     } else {
         MessageBox("Warning!", "Not enough space on the SD card to write to!", TYPE_OK);
@@ -140,7 +140,7 @@ void UI::optDumpBoots() {
 void UI::optDumpNand() {
     if(Tools::CheckFreeSpace() >= (u64)MAX_SIZE) {
         appletBeginBlockingHomeButton(0);
-        Tools::DumpPartition(rawnand, "nand.bin");
+        Tools::DumpPartition(FsBisStorageId_UserDataRoot, "nand.bin");
         appletEndBlockingHomeButton();
     } else {
         MessageBox("Warning!", "Not enough space on the SD card to write to!", TYPE_OK);

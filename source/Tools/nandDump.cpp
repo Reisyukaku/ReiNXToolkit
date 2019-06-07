@@ -104,18 +104,18 @@ void Tools::calculate_time(u64 begin, u64 end) {
     ui->MessageBox("Notice", timeBuff, TYPE_OK);
 }
 
-int Tools::DumpPartition(int part_number, string name) {
+int Tools::DumpPartition(FsBisStorageId part_number, string name) {
     switch(part_number){
-        case 0:
+        case FsBisStorageId_Boot0:
             buffer_size = BOOT_BLOCK_SIZE;
             break;
-        case 10:
+        case FsBisStorageId_Boot1:
             buffer_size = BOOT_BLOCK_SIZE;
             break;
-        case 20:
+        case FsBisStorageId_UserDataRoot:
             buffer_size = NAND_BLOCK_SIZE;
             break;
-        case 27:
+        case FsBisStorageId_CalibrationBinary:
             buffer_size = CAL0_BLOCK_SIZE;
             break;
     }
@@ -146,7 +146,7 @@ int Tools::DumpPartition(int part_number, string name) {
     }
     float dump_percent=0.0f;
     u64 file_num=0;
-    if(part_number==partitions::rawnand) {
+    if(part_number==FsBisStorageId_UserDataRoot) {
         file_num = check_progress();
     }
     
@@ -156,7 +156,7 @@ int Tools::DumpPartition(int part_number, string name) {
         prog.max = file_max;
         prog.curr = 0;
         prog.step = buffer_size;
-        if(part_number==partitions::rawnand)
+        if(part_number==FsBisStorageId_UserDataRoot)
             ui->CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files) + "...");
         else  ui->CreateProgressBar(&prog, "Dumping file " + to_string(file_num+1) + " of " + to_string(total_files+1) + "...");
         
@@ -171,7 +171,7 @@ int Tools::DumpPartition(int part_number, string name) {
             //UI::printmessage("didnt open file, nullptr\n");
             return -1;
         }
-        if(part_number==partitions::rawnand){
+        if(part_number==FsBisStorageId_UserDataRoot){
             char placehldr[] = "ReiNX";
             fseek(fp, MAX_SIZE-sizeof(placehldr), SEEK_SET);
             fwrite(placehldr, 1, sizeof(placehldr), fp);
@@ -187,7 +187,7 @@ int Tools::DumpPartition(int part_number, string name) {
         }
         fclose(fp);
         file_num++;
-        if(part_number==partitions::rawnand)
+        if(part_number==FsBisStorageId_UserDataRoot)
             write_progress(file_num);
         if((CheckFreeSpace() < MAX_SIZE) && (file_num<10)){
             fsStorageClose(&store); 
@@ -207,7 +207,7 @@ int Tools::DumpPartition(int part_number, string name) {
     calculate_time(start, finish);
     timeExit();
     create_combine_batch();
-    if(part_number==partitions::rawnand)
+    if(part_number==FsBisStorageId_UserDataRoot)
         delete_progress();
     
     return 0;
