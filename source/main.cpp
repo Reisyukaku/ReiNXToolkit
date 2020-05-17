@@ -1,6 +1,6 @@
 /*
 * ReiNX Toolkit
-* Copyright (C) 2018  Team ReiSwitched
+* Copyright (C) 2018-2020  Reisyukaku
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,32 +17,36 @@
 */
 
 #include <switch.h>
-#include "UI.hpp"
+#include "Engine.hpp"
 
+#ifdef __SWITCH__
+extern "C"{    
+    void userAppInit(void);
+    void userAppExit(void);
+}
 
-int main() {    
-	UI ui(TITLE, VERSION);
-	UI::setInstance(ui);
-    ui.renderMenu();
-    
-    while(appletMainLoop()) {        
-        hidScanInput();
-        u64 PressedInput = hidKeysDown(CONTROLLER_P1_AUTO);
-        if((PressedInput & KEY_LSTICK_UP)||(PressedInput & KEY_DUP)) {
-            ui.inSubMenu ? ui.SubMenuUp() : ui.MenuUp();
-            ui.renderMenu();
-        }
-        else if((PressedInput & KEY_LSTICK_DOWN)||(PressedInput & KEY_DDOWN)) {
-            ui.inSubMenu ? ui.SubMenuDown() : ui.MenuDown();
-            ui.renderMenu();
-        }
-        if(PressedInput & KEY_A) {
-            ui.MenuSel();
-            ui.renderMenu();
-        }
-        if(PressedInput & KEY_B) {
-            ui.MenuBack();
-            ui.renderMenu();
-        }
+void userAppInit(void) {
+    plInitialize(PlServiceType_User);
+    romfsInit();
+    fsdevMountSdmc();
+    socketInitializeDefault();
+}
+
+void userAppExit(void) {
+    plExit();
+    romfsExit();
+    fsdevUnmountAll();
+    socketExit();
+}
+#endif
+
+int main(int argc, char **argv) {
+    nxlinkStdio();
+    printf("Initializing engine...\n");
+	Engine eng(TITLE, VERSION);
+    while(appletMainLoop() && eng.Running) {
+        eng.Clear();
+        eng.Update();
+        eng.Render();
     }
 }

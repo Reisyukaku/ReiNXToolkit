@@ -1,6 +1,6 @@
 /*
 * ReiNX Toolkit
-* Copyright (C) 2018  Team ReiSwitched
+* Copyright (C) 2018  Reisyukaku
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,9 @@
 int Tools::toggle_rcm() {
 	FsStorage store;
 	int ret = 0;
-	int boot0_partition = 0; //boot0 is represented by 0x0 internally
-	Result rc =  fsOpenBisStorage(&store, boot0_partition);
+	Result rc =  fsOpenBisStorage(&store, FsBisPartitionId_BootPartition1Root);
 	//UI::printmessage("fsOpenBisStorage Result: %d\n", rc);
-	u64 size = 0;
+	s64 size = 0;
 	fsStorageGetSize(&store, &size);
 	if(size==0) {
 		//UI::printmessage("Storage size is zero, error...\n");

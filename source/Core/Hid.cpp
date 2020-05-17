@@ -1,6 +1,6 @@
 /*
 * ReiNX Toolkit
-* Copyright (C) 2018  Team ReiSwitched
+* Copyright (C) 2018-2020  Reisyukaku
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
-#include <switch.h>
-#include <string>
-#include <vector>
-#include <functional>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL2_gfxPrimitives.h> 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include "Hid.hpp"
 
-#include "MenuObj.hpp"
-#include "Render.hpp"
-#include "Themes.hpp"
+u64 Hid::Input = 0;
 
-using namespace std;
-
-class MenuOption : public MenuObj
-{
-    public:
-        MenuOption(string Name, string Desc, function<void()> Call);
-        string getDesc();
-        void callFunc();
-        vector<MenuOption> subMenu;
-
-    protected:
-        string desc;
-        function<void()> callback;
-};
+void Hid::KeyProcess() {
+    hidScanInput();
+    Input = hidKeysDown(CONTROLLER_P1_AUTO);
+}

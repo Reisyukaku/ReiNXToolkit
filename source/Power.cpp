@@ -1,6 +1,6 @@
 /*
 * ReiNX Toolkit
-* Copyright (C) 2018  Team ReiSwitched
+* Copyright (C) 2018-2020  Reisyukaku
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Services/bpc.h"
 #include "Power.hpp"
 
 void Power::Reboot() {
-    bpcInitialize();
-    bpcRebootSystem();
-    bpcExit();
+    //
 }
 
 void Power::Shutdown() {
-	bpcInitialize();
-    bpcShutdownSystem();
-    bpcExit();
+	//
 }

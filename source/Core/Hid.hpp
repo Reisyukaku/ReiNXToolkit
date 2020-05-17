@@ -1,6 +1,6 @@
 /*
 * ReiNX Toolkit
-* Copyright (C) 2018  Team ReiSwitched
+* Copyright (C) 2018-2020  Reisyukaku
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "MenuObj.hpp"
+#pragma once
+#include <switch.h>
 
-using namespace std;
-
-string MenuObj::getName() {
-    return name;
-}
+class Hid {
+public:
+    static void KeyProcess();
+    static u64 Input;
+};

@@ -38,7 +38,7 @@ APP_VERSION := 1.4
 ICON := Icon.jpg
 TARGET		:=	ReiNXToolkit
 BUILD		:=	build
-SOURCES		:=	source source/UI source/Tools source/Net source/Utils source/Services
+SOURCES		:=	source source/UI source/Tools source/Net source/Utils source/Core
 DATA		:=	data
 INCLUDES	:=	include
 EXEFS_SRC	:=	exefs_src
@@ -60,7 +60,7 @@ CXXFLAGS	:= $(CFLAGS) -fno-exceptions -Wno-missing-field-initializers -std=gnu++
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=${DEVKITPRO}/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lfreetype -lSDL2_mixer -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lcurl -lmbedtls -lmbedx509 -lmbedcrypto -lz -lnx
+LIBS	:= -lSDL2 -lfreetype -lSDL2_mixer -lopusfile -lopus -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_image -lwebp -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lcurl -lmbedtls -lmbedcrypto -lmbedx509 -lz -lnx -lstdc++fs
 
 
 #---------------------------------------------------------------------------------

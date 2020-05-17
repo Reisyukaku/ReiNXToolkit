@@ -1,6 +1,6 @@
 /*
 * ReiNX Toolkit
-* Copyright (C) 2018  Team ReiSwitched
+* Copyright (C) 2018-2020  Reisyukaku
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,40 @@
 */
 
 #pragma once
+#include <stdio.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/errno.h>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL2_gfxPrimitives.h> 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
 #include <switch.h>
-using namespace std;
-
-#include "UI/Render.hpp"
-#include "UI/Themes.hpp"
+#include "Net/Request.hpp"
+#include "Tools/autorcm.hpp"
+#include "Tools/kipmanager.hpp"
+#include "Tools/reinxconfig.hpp"
+#include "Utils/unzip_utils.hpp"
+#include "FS.hpp"
+#include "Power.hpp"
 #include "UI/types.hpp"
-#include "UI/MenuOption.hpp"
-#include "Tools/nandDump.hpp"
+#include "UI/UIElement.hpp"
+#include "UI/Button.hpp"
+#include "UI/MessageBox.hpp"
+#include "Core/Graphics.hpp"
+#include "Core/Audio.hpp"
+#include "Core/Hid.hpp"
+#include "UI/Themes.hpp"
 
-class UI
+class Engine
 {
     public:
-        static UI * mInstance;
-        Render mRender;
-        Themes *mThemes;
         bool inSubMenu;
-        static UI * getInstance();
-        static void setInstance(UI ui);
-        UI(string title, string footer);
+        Engine(string title, string footer);
+        ~Engine();
+        void Render();
+        void Clear();
+        void Update();
+        
         void renderMenu();
         void MenuUp();
         void MenuDown();
@@ -51,17 +58,14 @@ class UI
         void MenuBack();
         void SubMenuUp();
         void SubMenuDown();
-        bool MessageBox(string header, string message, MessageType type);
-        void CreateProgressBar(ProgBar *prog, string header);
-        void IncrementProgressBar(ProgBar *prog);
-        void drawScaled(SDL_Surface *surf, SDL_Texture *tex, int x, int y, u32 w, u32 h);
+        
+        bool Running;
     private:
         //MainMenu
         void optAutoRCM();
         void optReiUpdate();
         void optDumpCal0();
         void optDumpBoots();
-        void optDumpNand();
         void optToggleKip(string path);
         void drawKipman();
         void drawCfwman();
@@ -74,14 +78,15 @@ class UI
         void optAbout();
         void optUpdateHB();
         
-        void CreatePopupBox(u32 x, u32 y, u32 w, u32 h, string header);
-        void drawText(int x, int y, SDL_Color scolor, string text, TTF_Font *font);
-        void drawRect(int x, int y, int w, int h, SDL_Color scolor);
-        void drawRect(int x, int y, int w, int h, SDL_Color scolor, unsigned border, SDL_Color bcolor);
-        void drawBackXY(SDL_Surface *surf, SDL_Texture *tex, int x, int y);
-        void drawBack(SDL_Surface *surf, SDL_Texture *tex);
+        Mix_Music *menuSel;
+        Mix_Music *menuConfirm;
+        Mix_Music *menuBack;
         
-        void setTheme(Theme Theme);
-        void deinit();
-        void exitApp();
+        UI::MessageBox *msgBox;
+        
+        SDL_Texture *bgImage;
+        u32 currIndex;
+
+        std::vector<UIElement*> mainMenu;
+        Audio *audio;
 };
