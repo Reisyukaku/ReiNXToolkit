@@ -51,33 +51,9 @@ class Engine
         void Clear();
         void Update();
         
-        void renderMenu();
-        void MenuUp();
-        void MenuDown();
-        void MenuSel();
-        void MenuBack();
-        void SubMenuUp();
-        void SubMenuDown();
-        
         bool Running;
-    private:
-        //MainMenu
-        void optAutoRCM();
-        void optReiUpdate();
-        void optDumpCal0();
-        void optDumpBoots();
-        void optToggleKip(string path);
-        void drawKipman();
-        void drawCfwman();
         
-        //SubMenus
-        void optImage(u32 ind);
-        void optCfwCfg(string file);
-        void optShutdown();
-        void optReboot();
-        void optAbout();
-        void optUpdateHB();
-        
+    private:        
         Mix_Music *menuSel;
         Mix_Music *menuConfirm;
         Mix_Music *menuBack;
@@ -89,4 +65,5 @@ class Engine
 
         std::vector<UIElement*> mainMenu;
         Audio *audio;
+        KipManager *kipMan;
 };

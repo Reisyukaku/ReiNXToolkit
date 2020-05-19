@@ -36,6 +36,14 @@ class Button: public UIElement
             Name = text;
         }
         
+        Button(std::string text, UIElement *sub) : UIElement() {
+            printf("[UIElement]: Creating sub button %s\n", text.c_str());
+            Callback = nullptr;
+            Properties = ELEM_Button;
+            Color = Graphics::GetSelectCol();
+            Name = text;
+        }
+        
         ~Button() {
             //
         }

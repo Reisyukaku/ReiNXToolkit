@@ -57,7 +57,9 @@ Engine::Engine(std::string Title, std::string Version) {
     mainMenu.push_back(new Button("Toggle AutoRCM", nullptr));
     mainMenu.push_back(new Button("Backup tool", nullptr));
     mainMenu.push_back(new Button("Power", nullptr));
-    mainMenu.push_back(new Button("Help", [&]()->Result{ msgBox->Show("Help", "Made by Reisyukaku"); return 0; }));
+    mainMenu.push_back(new Button("Help", nullptr));
+    
+    kipMan = new KipManager("/ReiNX/sysmodules");
     
     //Subpages
     /*mainMenu[0].subMenu.push_back(MenuOption("Update ReiNX", "", nullptr));
@@ -107,6 +109,7 @@ void Engine::Update() {
     }
     if(Hid::Input & KEY_A) {
         if(mainMenu[currIndex]->HasFunc()) mainMenu[currIndex]->Run();
+        msgBox->Show("Help", "By Reisyukaku");
     }
     if(Hid::Input & KEY_B) {
         Running = false;

@@ -20,12 +20,33 @@
 
 class Themes {
 public:
-    
+    typedef enum ThemeType {
+        THEME_DARK = 0,
+        THEME_LIGHT
+    };
     static Themes* getInstance() {
         if (instance == nullptr)
             instance = new Themes();
         return instance;
     };
+    
+    void SetTheme(ThemeType type) {
+        switch(type){
+            case THEME_DARK: {
+                bg = "romfs:/Graphics/defaultDark.png";
+                msgBox = "romfs:/Graphics/Forms/PopupMessage.png";
+                break;
+            }
+            case THEME_LIGHT: {
+                bg = "romfs:/Graphics/defaultLight.png";
+                msgBox = "romfs:/Graphics/Forms/PopupMessage.png";
+                break;
+            }
+        }
+    }
+    
+    std::string GetBackgroundTex() { return bg; }
+    std::string GetPopupMessageTex() { return msgBox; }
 
 private:
     static Themes* instance;
@@ -36,4 +57,5 @@ private:
     
     Themes(const Themes&);
     Themes& operator=(const Themes&);
+    std::string bg, msgBox;
 };

@@ -46,12 +46,13 @@ class UIElement
         virtual void SetOption(std::string text, u32 ind = 0) {}
         virtual void SetOptions(std::vector<std::string> opts) {}
         virtual void IncrementOption(u32 cap = 0) {}
-        //virtual void SetImage(Texture *tex) {}
+        virtual void SetImage(SDL_Texture *tex) {}
         virtual void SetNameText(std::string name) {}
         virtual void SetCallback(std::function<Result()> callback) { Callback = callback; }
         
         Element Properties;
         std::string Name;
     protected:
+        std::vector<UIElement*> subs;
         std::function<Result()> Callback;
 };

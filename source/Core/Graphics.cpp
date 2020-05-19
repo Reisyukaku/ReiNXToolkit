@@ -39,13 +39,12 @@ void Graphics::Init(Rect pos) {
         printf("[Error]: Window null (%s)\n", SDL_GetError());
         return;
     }
-    Rend = SDL_CreateRenderer(Window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    Rend = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
     if(!Rend) {
         printf("[Error]: Renderer null (%s)\n", SDL_GetError());
         return;
     }
     SDL_SetRenderDrawBlendMode(Rend, SDL_BLENDMODE_BLEND);
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     TTF_Init();
     SDL_SetRenderDrawColor(Rend, 0xFF, 0xFF, 0xFF, 0xFF);
